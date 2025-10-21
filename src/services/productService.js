@@ -1,71 +1,43 @@
-import { PrismaClient } from '../generated/prisma/index.js';
 import { CreateProductDTO } from '../dtos/CreateProductDTO.js';
-import { ProductDTO } from '../dtos/ProductDTO.js';
 import { UpdateProductDTO } from '../dtos/UpdateProductDTO.js';
+import { del, findAll, findById, save, update } from '../models/productModel.js';
 
-const prisma = new PrismaClient();
 
-async function save(data) {
+async function createProductService(data) {
     const dto = new CreateProductDTO(data);
-
-    const saved = await prisma.product.create({
-        data: {
-            nome: dto.nome,
-            preco: dto.preco,
-            categoria: dto.categoria
-        }
-    });
-
-    return new ProductDTO(saved);
+    const result = await save(dto);
+    return result;
 }
 
-async function findById(id) {
-    const found = await prisma.product.findUnique({
-        where: {
-            id: Number(id)
-        }
-    });
-
-    if(!found) throw new Error("Nenhum produto encontrado.");
-
-    return new ProductDTO(found);
+async function findIdService(id) {
+    const result = await findById(id);
+    if(result === null) throw new Error("Produto nao encontrado.");
+    return result;
 }
 
-async function list() {
-    const listed = await prisma.product.findMany();
-
-    return listed.map((p) => new ProductDTO(p));
+async function listProductsService() {
+    const result = await findAll();
+    if(result === null) throw new Error("Nenhum produto encontrado");
+    return result;
 }
 
-async function update(productId, data) {
+async function updateProductService(productId, data) {
     const dto = new UpdateProductDTO(data);
 
     const exists = await findById(productId);
+    if(exists === null) throw new Error("Produto nao encontrado.");
 
-    if(!exists) throw new Error("Produto nao encontrado.");
-
-    const updated = await prisma.product.update({
-        where: { id: Number(productId) },
-        data: {
-            nome: dto.nome,
-            preco: dto.preco,
-            categoria: dto.categoria
-        }
-    });
-
-    return new ProductDTO(updated);
+    const result = await update(productId, dto);
+    return result;
 }
 
-async function del(productId) {
+async function deleteProductService(productId) {
     const exists = await findById(productId);
 
-    if(!exists) throw new Error("Produto nao encontrado.");
+    if(exists === null) throw new Error("Produto nao encontrado.");
 
-    const deleted = await prisma.product.delete({
-        where: { id: Number(productId) }
-    });
-
-    return new ProductDTO(deleted);
+    const result = await del(productId);
+    return result;
 }
 
-export { save, list, findById, update, del }
+export { createProductService, findIdService, listProductsService, updateProductService, deleteProductService }
