@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { createProductController, getProductById, listProductsController } from '../controllers/productController.js';
+import { createProductController, delProductController, getProductById, listProductsController, updateProductController } from '../controllers/productController.js';
 
 const prod = Router();
 
@@ -9,12 +9,8 @@ prod.get('/:id', getProductById);
 
 prod.post('/', createProductController);
 
-// prod.put('/:id', (req, res) => {
-//     return res.status(201).send("Hello World!");
-// });
+prod.put('/:id', updateProductController);
 
-// prod.delete('/:id', (req, res) => {
-//     return res.status(201).send("Hello World!");
-// });
+prod.delete('/:id', delProductController);
 
 export { prod }
