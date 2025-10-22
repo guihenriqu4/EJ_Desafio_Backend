@@ -14,12 +14,24 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Product {
+model Game {
+  //@id define a chave primaria
+  //@default(autoincrement()) gera o id automaticamente
   id Int @id @default(autoincrement())
 
+  //@unique garante que nao havera dois jogos com nomes iguais
   nome String @unique
 
   preco Float
 
   categoria String
+
+  //@default(now()) preenche o campo com a data e hora da criacao
+  createdAt DateTime @default(now())
+
+  //@updatedAt atualiza a data e hora de quando o elemento foi modificado
+  updatedAt DateTime @updatedAt
+
+  //@@map renomeia o nome da tabela no banco para o especificado
+  @@map("games")
 }

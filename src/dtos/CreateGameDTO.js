@@ -1,9 +1,10 @@
-class CreateProductDTO {
+//DTO destinada à criação do elemento
+class CreateGameDTO {
     constructor({ nome, preco, categoria }) {
 
         //Verifica a presença dos elementos necessários
         if(!nome) throw new Error("o campo 'nome' e obrigatorio.");
-        if(!preco) throw new Error("o campo 'preco' e obrigatorio.");
+        if(preco === undefined) throw new Error("o campo 'preco' e obrigatorio.");
         if(!categoria) throw new Error("o campo 'categoria' e obrigatorio.");
 
         //Verifica se os tipos dos elementos recebidos estão de acordo com o desejado
@@ -18,4 +19,4 @@ class CreateProductDTO {
     }
 }
 
-export { CreateProductDTO }
+export { CreateGameDTO }
